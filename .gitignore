@@ -124,5 +124,5 @@ host_list
 .vscode/
 
 # Custom directories and files
-/others
+/scripts/others
 .loglogin
