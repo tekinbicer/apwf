@@ -1,0 +1,5 @@
+python>=3.9
+funcx>=0.3.6
+globus-automenta-client>=0.13.0b2 # Globus automate requires the latest (beta in this case) version for Globus >3.0 SDK usage.
+setuptools
+setuptools_scm_git_archive

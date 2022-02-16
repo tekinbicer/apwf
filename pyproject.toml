@@ -1,0 +1,12 @@
+# Build app requirements for APWF
+
+[build-system]
+requires = [
+    "setuptools>=60",
+    "wheel",
+    "setuptools_scm>=6.4",
+    "setuptools_scm_git_archive"
+]
+build-backend = 'setuptools.build_meta'
+
+[tool.setuptools_scm]

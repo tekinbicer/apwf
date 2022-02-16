@@ -1,0 +1,59 @@
+---
+'funcx_endpoints': 
+  #'aps_mona2_daq': '190dfdbd-4d4f-40fa-a0b1-63237042f989' # Mona2 machine
+  'aps_mona4_daq': '37766683-85e2-49df-a1a7-6a070f566022' # Mona4 machine
+  'alcf_polaris_gpu': 'ef62df54-6d3c-43ff-8f84-c334f3ab3000' # Polaris testbed endpoint
+  #'alcf_theta_knl': '2feb2ed7-32ec-426f-9d0c-f85f2ef324a2' # Theta KNL funcX endpoint (lives on thetalogin3)
+  #'lcrc_bebop_bdw': '037523e6-0f96-4df6-b2a4-b37d2877bbbe' # LCRC BDWAll funcX endpoint
+  #'alcf_theta_gpu': '5b5de98e-7701-4484-b03c-619a557c5fe6' # ThetaGPU funcX endpoint, theta-ptycho-8w-1n-2cn 
+  #'alcf_theta_gpu': '2ab22e1f-4cf1-47e9-a40c-dd8c58b41d73' # ThetaGPU funcX endpoint, theta-ptycho-8w-1n
+
+'globus_endpoints':
+  'alcf_theta': '08925f04-569f-11e7-bef8-22000b9a448b' # ALCF Theta DTN
+  'aps_mona4_gcp': 'dd916908-0072-11e7-badc-22000b9a448b' # My globus connect personel on mona4
+
+'funcx_resource_timeout': 30 # minutes
+'funcx_req_delay': 2 # seconds
+'data_generation_delay': 2 # seconds
+
+'executor':
+  'activated_iids_file_path': '/home/beams/TBICER/logs/activated_iids.csv'
+  'log_folder_path': '/home/beams/TBICER/logs/20210723_workflow-Xu/tests'
+
+'flow':
+  'title': 'Simple ptycho data analysis flow'
+  'sample_name': 'battery'
+  'source':
+    'root_folder_path': '/mnt/micdata2/velociprobe/2021-2/Xu'
+    'input_folder_prefix': 'ptycho-test'
+    'input_position_folder_prefix': 'positions'
+    'output_folder_prefix': 'wf-recons-test'
+  'destination':
+    'root_folder_path': '/grand/hp-ptycho/bicer/20210723_workflow-Xu'
+    'input_folder_prefix': 'input'
+    'output_folder_prefix': 'output'
+  'only_larger_than_scanid': 1200 # Junjing's range 1126-2004
+  'task':
+    'python_path': '/home/bicer/miniconda3/envs/ptycho/bin/python'
+    'executable':
+      'script_path': '/home/bicer/tike-runs/tike-pinned-ptycho-wf.py'
+      'params':
+        'probe_path': '/grand/hp-ptycho/bicer/20210723_workflow-Xu/probes/velociprobe-probe.npy'
+        'algorithm': 'rpie'
+        'nmodes': 1
+        'update_positions': False
+        'niter': 100
+        'output_freq': 20
+        'recover_psi': False
+        'recover_probe': False
+        'recover_positions': False
+        'model': 'gaussian'
+        'ngpus': 1
+        'use_mpi': False
+        'overwrite': True
+        'auto_pin': True
+        'log_folder_path': "/grand/hp-ptycho/bicer/20210723_workflow-Xu/logs"
+
+
+
+
