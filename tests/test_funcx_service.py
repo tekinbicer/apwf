@@ -42,7 +42,7 @@ class TestFuncXEndpoints(unittest.TestCase):
         
         # Load the configuration file
         try:
-            configfile = pathlib.Path(__file__).parent.joinpath("config.yml")
+            configfile = pathlib.Path(__file__).parent.joinpath("test_wf_config.yml")
             cls.config= yaml.safe_load(open(configfile))
             cls.funcx_endpoints = cls.config['funcx_endpoints']
             cls.funcx_resource_timeout = cls.config['funcx_resource_timeout']

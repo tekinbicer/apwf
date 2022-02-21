@@ -1,3 +1,6 @@
+import time
+import logging
+import sys
 
 ptycho_flow_definition = {
   #"definition":{
@@ -86,3 +89,20 @@ ptycho_flow_definition = {
   #},
   #"input_schema": {}
 }
+
+def fx_get_result(wfunc_id, fxc, times=None, delay=2):
+    fx_res = None
+    while True:
+      try:
+          time.sleep(delay)
+          fx_res = fxc.get_result(wfunc_id)
+          if isinstance(times, int): 
+            if times>0 : times-=1
+            else: return fx_res 
+      except KeyboardInterrupt:
+          logging.debug(f"Keyboard interrupt is caught: {sys.exc_info()[0]}")
+          break
+      except:
+          logging.debug(f"Pending results: {sys.exc_info()[0]}")
+          continue
+      return fx_res

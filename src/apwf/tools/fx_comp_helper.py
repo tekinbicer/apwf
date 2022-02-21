@@ -62,7 +62,88 @@ def ptycho_func(**data):
     outstr = f"{res.stdout}"
     return outstr
 
+def comp_wf_prepare(input_folder_path, output_folder_path, log_folder_path,
+                    create_input_folder=True, create_output_folder=True, create_log_folder=True,
+                    cleanup_input_folder=False, cleanup_output_folder=False, cleanup_log_folder=False):
+    '''Check and prepare the compute cluster's folders for workflow
+    execution.
 
+    The workflows system requires all the folders to be ready before its
+    execution. This function checks if the inputs and their folders for compute
+    tasks are ready. It also can create and cleanup the folders, which is its
+    responsibility to manage. 
+
+    Args:
+        input_folder_path:
+            A string that points to the scan folders' path (root). For each
+            folder under this path there are position file, diffraction patterns
+            (and others) exist for analysis. The workflow system expects
+            this folder. If it doesn't exist and create_input_folder is set to
+            False, then it returns an error code (1). If the folder exists and
+            cleanup_input_folder is True, this function deletes everything under
+            it.
+        output_folder_path:
+            A string that points to the analyzed/reconstructed images directory
+            path. The workflow system expects this folder to exist, if the
+            folder does not exist then it can create the folder after checking
+            create_output_folder. If it doesn't exist and create_input_folder is
+            set to False, then it returns an error code (2). If the folder
+            exists and cleanup_output_folder is True, this function deletes
+            everything under it.
+        log_folder_path:
+            A string that points to the log directory path.  The workflow system
+            expects this folder to exist, if the folder does not exist then it
+            can create the folder after checking create_log_folder. If it
+            doesn't exist and create_log_folder is set to False, then it returns
+            an error code (3). If the folder exists and cleanup_log_folder is
+            True, this function deletes everything under it.
+    
+    Returns:
+        0 if all is fine; otherwise, see the error codes above.
+    '''
+    import os
+    from shutil import rmtree
+
+    # Handle input folder
+    check_input_folder = os.path.isdir(input_folder_path)
+    if (not check_input_folder):
+        if not create_input_folder: return 1
+        else:
+            try: os.makedirs(input_folder_path, exist_ok=True)
+            except Exception as e: return 5
+    if cleanup_input_folder:
+        for f in os.listdir(input_folder_path):
+            full_path = f"{input_folder_path}/{f}"
+            if os.path.isfile(full_path): os.remove(full_path)
+            if os.path.isdir(full_path): rmtree(full_path, ignore_errors=True)
+    
+    # Handle output folder
+    check_output_folder = os.path.isdir(output_folder_path)
+    if (not check_output_folder):
+        if not create_output_folder: return 2
+        else:
+            try: os.makedirs(output_folder_path, exist_ok=True)
+            except Exception as e: return 6
+    if cleanup_output_folder:
+        for f in os.listdir(output_folder_path):
+            full_path = f"{output_folder_path}/{f}"
+            if os.path.isfile(full_path): os.remove(full_path)
+            if os.path.isdir(full_path): rmtree(full_path, ignore_errors=True)
+
+    # Handle log folder
+    check_log_folder = os.path.isdir(log_folder_path)
+    if (not check_log_folder):
+        if not create_log_folder: return 3
+        else:
+            try: os.makedirs(log_folder_path, exist_ok=True)
+            except Exception as e: return 4
+    if cleanup_log_folder:
+        for f in os.listdir(log_folder_path):
+            full_path = f"{log_folder_path}/{f}"
+            if os.path.isfile(full_path): os.remove(full_path)
+            if os.path.isdir(full_path): rmtree(full_path, ignore_errors=True)
+
+    return 0
 
 
 class DispatcherHelperFuncs:
