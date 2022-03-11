@@ -12,8 +12,8 @@ from funcx.sdk.client import FuncXClient
 # Parameters for the function execution
 # Below funcx endpoints are under Tekin's accound and 
 # needs to be setup for individual user.
-FX_ENDPOINT_UUID = '2feb2ed7-32ec-426f-9d0c-f85f2ef324a2' # Theta KNL endpoint
-#FX_ENDPOINT_UUID = '037523e6-0f96-4df6-b2a4-b37d2877bbbe' # LCRC Bebop endpoint
+#FX_ENDPOINT_UUID = '2feb2ed7-32ec-426f-9d0c-f85f2ef324a2' # Theta KNL endpoint
+FX_ENDPOINT_UUID = '037523e6-0f96-4df6-b2a4-b37d2877bbbe' # LCRC Bebop endpoint
 NPI_RPC = 128 # Number of pi functions to be run.
 wtime = 2 # Wait time for the 
 counter=0

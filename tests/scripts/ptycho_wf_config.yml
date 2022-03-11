@@ -25,7 +25,7 @@
   'sample_name': 'battery'
   'source':
     'root_folder_path': '/mnt/micdata2/velociprobe/2021-2/Xu'
-    'input_folder_prefix': 'ptycho-test'
+    'input_folder_prefix': 'ptycho-test-00'
     'input_position_folder_prefix': 'positions'
     'output_folder_prefix': 'wf-recons-test'
   'destination':
@@ -53,7 +53,3 @@
         'overwrite': True
         'auto_pin': True
         'log_folder_path': "/grand/hp-ptycho/bicer/20210723_workflow-Xu/logs"
-
-
-
-
