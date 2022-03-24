@@ -20,14 +20,15 @@ class EConfigs:
     dest_output_folder_prefix: str = field(init=False)
 
     def __post_init__(self, src_config, dest_config):
-        self.src_wf_root_path = src_config['root_folder_path']
-        self.src_input_folder_prefix = src_config['input_folder_prefix']
-        self.src_input_pos_folder_prefix = src_config['input_position_folder_prefix']
-        self.src_output_folder_prefix = src_config['output_folder_prefix']
+        object.__setattr__(self, 'src_wf_root_path', src_config['root_folder_path'])
+        #self.src_wf_root_path = src_config['root_folder_path']
+        object.__setattr__(self, 'src_input_folder_prefix', src_config['input_folder_prefix'])
+        object.__setattr__(self, 'src_input_pos_folder_prefix', src_config['input_position_folder_prefix'])
+        object.__setattr__(self, 'src_output_folder_prefix', src_config['output_folder_prefix'])
 
-        self.dest_wf_root_path = dest_config['root_folder_path']
-        self.dest_input_folder_prefix = dest_config['input_folder_prefix']
-        self.dest_output_folder_prefix = dest_config['output_folder_prefix']
+        object.__setattr__(self, 'dest_wf_root_path', dest_config['root_folder_path'])
+        object.__setattr__(self, 'dest_input_folder_prefix', dest_config['input_folder_prefix'])
+        object.__setattr__(self, 'dest_output_folder_prefix', dest_config['output_folder_prefix'])
 
 
 @dataclass(frozen=True)
@@ -72,21 +73,22 @@ class WFPaths:
         dest_input_pos_files.reverse()
         dest_output_folder_paths.reverse()
 
-        self.plist = zip(self.iids, 
+        object.__setattr__(self, 'plist', list(zip(iids, 
                 fsrc_input_folder_paths, src_input_pos_files, src_output_folder_paths, 
-                dest_input_folder_paths, dest_input_pos_files, dest_output_folder_paths)
-
-        if logging.Logger.isEnabledFor(logging.DEBUG):
+                dest_input_folder_paths, dest_input_pos_files, dest_output_folder_paths)))
+        
+        apwfLogger = logging.getLogger('apwf')
+        if apwfLogger.isEnabledFor(logging.DEBUG):
             for (iid, src_input_folder_path, src_input_pos_file, src_output_folder_path, 
                 dest_input_folder_path, dest_input_pos_file, dest_output_folder_path ) in self.plist:
-                logging.debug(f"{iid}: Source input folder: {src_input_folder_path}; "
+                apwfLogger.debug(f"{iid}: Source input folder: {src_input_folder_path}; "
                             f"Source position file: {src_input_pos_file}; "
                             f"Source output folder: {src_output_folder_path}")
-                logging.debug(f"Dest. input folder: {dest_input_folder_path}; "
+                apwfLogger.debug(f"Dest. input folder: {dest_input_folder_path}; "
                             f"Dest. position file: {dest_input_pos_file}; "
                             f"Dest. output folder: {dest_output_folder_path}")
             if(len(iids)>0):
-                logging.debug(f"All iids:{iids}\n"
+                apwfLogger.debug(f"All iids:{iids}\n"
                                 #f"Processed iids from output folder:{oiids}\n"
                                 #f"Currently/actively being processed iids:{activated_iids}\n"
                                 f"Process scans with iid>{wfc.add_larger_than}\n"
@@ -110,6 +112,7 @@ class WFFlowsInputs:
                         func_ptycho_uuid, task_config, exec_params_config, 
                         sample_name, paths):
         gcounter = 0
+        fitmp = []
         for (iid, src_input_folder_path, src_input_pos_file, src_output_folder_path,
             dest_input_folder_path, dest_input_pos_file, dest_output_folder_path ) in paths:
 
@@ -138,12 +141,12 @@ class WFFlowsInputs:
                 }
             }
             gcounter+=1
-            self.filist.append(flow_input)
+            fitmp.append(flow_input)
+        object.__setattr__(self, 'filist', fitmp)
 
 
 
 def append_activated_iids(data, csv_path):
-    print("adding row to activated: {}".format(data))
     with open(csv_path, 'a', newline='') as f:
         writer = csv.writer(f)
         for row in data:
