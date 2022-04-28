@@ -1,3 +1,4 @@
+import sys
 import csv
 from dataclasses import InitVar, dataclass
 from dataclasses import field
@@ -144,6 +145,27 @@ class WFFlowsInputs:
             fitmp.append(flow_input)
         object.__setattr__(self, 'filist', fitmp)
 
+
+
+def setup_logger(wf_config):
+    # Log configuration for both stdout and file
+    log_file_name = f"{wf_config['executor']['log_folder_path']}/funcx-ptycho-wf-{wf_config['flow']['sample_name']}.log"
+    logFormatter = logging.Formatter(fmt='%(asctime)s %(levelname)s %(message)s', datefmt='%Y-%m-%d %H:%M:%S')
+
+    apwfLogger = logging.getLogger('apwf')
+    apwfLogger.setLevel(logging.INFO)
+
+    fileHandler = logging.FileHandler(filename=log_file_name, mode='a')
+    fileHandler.setFormatter(logFormatter)
+    fileHandler.setLevel(logging.INFO)
+    apwfLogger.addHandler(fileHandler)
+
+    consoleHandler = logging.StreamHandler(sys.stdout)
+    consoleHandler.setFormatter(logFormatter)
+    consoleHandler.setLevel(logging.INFO)
+    apwfLogger.addHandler(consoleHandler)
+
+    return apwfLogger
 
 
 def append_activated_iids(data, csv_path):

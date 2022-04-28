@@ -32,7 +32,7 @@
     'root_folder_path': '/grand/hp-ptycho/bicer/20210723_workflow-Xu'
     'input_folder_prefix': 'input'
     'output_folder_prefix': 'output'
-  'only_larger_than_scanid': 1306 # Junjing's range 1126-2004
+  'only_larger_than_scanid': 1459 # Junjing's range 1126-2004
   'task':
     'python_path': '/home/bicer/miniconda3/envs/ptycho/bin/python'
     'executable':
@@ -42,8 +42,8 @@
         'algorithm': 'rpie'
         'nmodes': 1
         'update_positions': False
-        'niter': 1000
-        'output_freq': 200
+        'niter': 600
+        'output_freq': 100
         'recover_psi': False
         'recover_probe': False
         'recover_positions': False
