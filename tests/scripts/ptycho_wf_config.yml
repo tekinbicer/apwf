@@ -1,15 +1,15 @@
 ---
 'funcx_endpoints': 
-  #'aps_mona2_daq': '190dfdbd-4d4f-40fa-a0b1-63237042f989' # Mona2 machine
-  'aps_mona4_daq': '37766683-85e2-49df-a1a7-6a070f566022' # Mona4 machine
-  'alcf_polaris_gpu': 'b35e121c-5ed6-4980-a32e-9aee09089c36' # 14w per GPU #'ef62df54-6d3c-43ff-8f84-c334f3ab3000' # Polaris testbed endpoint
+  #'aps_mona2_daq': '190dfdbd-4d4f-40fa-a0b1-63237042f989' # APS-Mona2 machine
+  'aps_mona4_daq': '37766683-85e2-49df-a1a7-6a070f566022' # APS-Mona4 endpoint
+  'alcf_polaris_gpu': 'b35e121c-5ed6-4980-a32e-9aee09089c36' # ALCF-Polaris endpoint
   #'alcf_theta_knl': '2feb2ed7-32ec-426f-9d0c-f85f2ef324a2' # Theta KNL funcX endpoint (lives on thetalogin3)
   #'lcrc_bebop_bdw': '037523e6-0f96-4df6-b2a4-b37d2877bbbe' # LCRC BDWAll funcX endpoint
   #'alcf_theta_gpu': '5b5de98e-7701-4484-b03c-619a557c5fe6' # ThetaGPU funcX endpoint, theta-ptycho-gpu (thetalogin3)
 
 'globus_endpoints':
   'alcf_theta': '08925f04-569f-11e7-bef8-22000b9a448b' # ALCF Theta DTN
-  'aps_mona4_gcp': 'dd916908-0072-11e7-badc-22000b9a448b' # My globus connect personel on mona4
+  'aps_mona4_gcp': 'dd916908-0072-11e7-badc-22000b9a448b' # Globus connect personel on mona4
 
 'funcx_resource_timeout': 30 # minutes
 'funcx_req_delay': 2 # seconds
@@ -32,7 +32,7 @@
     'root_folder_path': '/grand/hp-ptycho/bicer/20210723_workflow-Xu'
     'input_folder_prefix': 'input'
     'output_folder_prefix': 'output'
-  'only_larger_than_scanid': 1459 # Junjing's range 1126-2004
+  'only_larger_than_scanid': 1459 # valid range 1126-2004
   'task':
     'python_path': '/home/bicer/miniconda3/envs/ptycho/bin/python'
     'executable':
@@ -42,7 +42,7 @@
         'algorithm': 'rpie'
         'nmodes': 1
         'update_positions': False
-        'niter': 600
+        'niter': 500
         'output_freq': 100
         'recover_psi': False
         'recover_probe': False
