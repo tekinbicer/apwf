@@ -1,6 +1,64 @@
 from subprocess import PIPE
 
 
+def ptycho_funcx_gpu_pin(**data):
+    """FuncX remote function call that executes Tike script for reconstruction"""
+    import os
+    import subprocess
+    import logging
+    from subprocess import PIPE
+
+    remote_log_file_name = f"{data['log_folder_path']}/apwf-{data['sample_name']}-w{data['wid']}.log"
+    logging.basicConfig(filename=remote_log_file_name,
+                        filemode='a',
+                        format='%(asctime)s %(levelname)s %(message)s',
+                        level=logging.INFO,
+                        datefmt='%Y-%m-%d %H:%M:%S')
+
+    logging.info("FuncX: Starting ptycho funcx function.")
+    python_path = data['python_path']
+    script_path = data['script_path']
+
+    #task execution parameters
+    ifpath = data['ifpath']
+    pospath = data['position_path']
+    probepath = data['probe_path']
+    ofpath = data['ofpath']
+    rec_alg = data['algorithm']
+    rec_nmodes = data['nmodes']
+    rec_niter = data['niter']
+    rec_output_freq = data['output_freq']
+    rec_recover_psi = '--recover-psi' if (('recover_psi' in data) and data['recover_psi']) else ''
+    rec_recover_probe = '--recover-probe' if (('recover_probe' in data) and data['recover_probe']) else ''
+    rec_recover_positions = '--recover-positions' if (('recover_positions' in data) and data['recover_positions']) else ''
+    rec_model = data['model']
+    rec_use_mpi = '--use-mpi' if (('use_mpi' in data) and data['use_mpi']) else ''
+    rec_overwrite = '--overwrite' if (('overwrite' in data) and data['overwrite']) else ''
+    rec_log_filename = remote_log_file_name
+    gpu_id = os.environ.get("CUDA_VISIBLE_DEVICES")
+
+    try:
+        os.mkdir(ofpath)
+    except:
+        pass
+
+    cmd = ( f"{python_path} {script_path} --algorithm={rec_alg} --nmodes={rec_nmodes} "
+            f"--niter={rec_niter} --output-freq={rec_output_freq} {rec_recover_psi} "
+            f"{rec_recover_probe} {rec_recover_positions} --model={rec_model} "
+            f"--gpu-id={gpu_id} {rec_use_mpi} --ifile='{ifpath}' --position-path={pospath} "
+            f"--probe-path={probepath} {rec_overwrite} "
+            f"--folder='{ofpath}' --log-file='{rec_log_filename}'" )
+    logging.info(f"FuncX: Running command: {cmd}")
+
+    try:
+        res = subprocess.run(cmd, stdout=PIPE, stderr=PIPE,
+                            shell=True, executable='/bin/bash')
+    except:
+        pass
+    outstr = f"{res.stdout}"
+    return outstr
+
+
 def ptycho_func(**data):
     """FuncX remote function call that executes Tike script for reconstruction"""
     import os
