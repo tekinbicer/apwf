@@ -145,6 +145,57 @@ class WFFlowsInputs:
             fitmp.append(flow_input)
         object.__setattr__(self, 'filist', fitmp)
 
+@dataclass(frozen=True)
+class WFGladierFlowsInputs:
+    src_endpoint: InitVar[str]
+    dest_endpoint: InitVar[str]
+    compute_fx_endpoint: InitVar[str]
+    func_ptycho_uuid: InitVar[str]
+    task_config: InitVar[dict]
+    exec_params_config: InitVar[dict]
+    sample_name: InitVar[str]
+    paths: InitVar[list]
+
+    filist: list[dict] = field(default_factory=list, init=False) 
+
+    def __post_init__(self, src_endpoint, dest_endpoint, compute_fx_endpoint, 
+                        task_config, exec_params_config, 
+                        sample_name, paths):
+        gcounter = 0
+        fitmp = []
+        for (iid, src_input_folder_path, src_input_pos_file, src_output_folder_path,
+            dest_input_folder_path, dest_input_pos_file, dest_output_folder_path ) in paths:
+
+            flow_input = {
+                "iid" : iid,
+                "input": {
+                    # Transfer inputs
+                    "source_endpoint": f"{src_endpoint}",
+                    "source_path": f"{src_input_folder_path}/",
+                    "source_pos_path": f"{src_input_pos_file}",
+                    "dest_endpoint": dest_endpoint,
+                    "dest_path": f"{dest_input_folder_path}/",
+                    "dest_pos_path": dest_input_pos_file,
+
+                    "result_path": f"{dest_output_folder_path}",
+                    "source_result_path": f"{src_output_folder_path}",
+                    # FuncX inputs
+                    # "fx_id": f"{func_ptycho_uuid}", GladierTool already knows this(?)
+                    "fx_ep": f"{compute_fx_endpoint}",
+                    "data": {'ifpath': f"{dest_input_folder_path}/fly{iid}_master.h5",
+                            'ofpath': f"{dest_output_folder_path}/",
+                            'position_path': dest_input_pos_file,
+                            'script_path': task_config['executable']['script_path'],
+                            'python_path': task_config['python_path'],
+                            **exec_params_config,
+                            'sample_name': sample_name, #wf_config['flow']['sample_name'],
+                            'wid':gcounter}
+                }
+            }
+            gcounter+=1
+            fitmp.append(flow_input)
+        object.__setattr__(self, 'filist', fitmp)
+
 
 
 def setup_logger(wf_config):
